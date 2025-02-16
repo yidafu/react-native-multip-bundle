@@ -24,7 +24,7 @@ function App(): React.JSX.Element {
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
-
+  console.log('render Biz component');
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar

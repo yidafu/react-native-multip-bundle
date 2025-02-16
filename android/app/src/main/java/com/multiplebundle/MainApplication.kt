@@ -41,28 +41,17 @@ class MainApplication :
     override val reactHost: ReactHost
         get() = getDefaultReactHost(applicationContext, reactNativeHost)
 
+
     override fun onCreate() {
         super.onCreate()
         SoLoader.init(this, OpenSourceMergedSoMapping)
         FLog.setMinimumLoggingLevel(FLog.VERBOSE)
         if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
             // If you opted-in for the New Architecture, we load the native entry point for this app.
+//            load()
             load(bridgelessEnabled = false)
         }
-        val manager = reactNativeHost.reactInstanceManager
-        manager.addReactInstanceEventListener(object : ReactInstanceEventListener {
-            override fun onReactContextInitialized(context: ReactContext) {
-                Log.i("TestApp", "App ReactNativeHost onReactContextInitialized")
-            }
-        })
-        reactHost.addReactInstanceEventListener( object : ReactInstanceEventListener {
-            override fun onReactContextInitialized(context: ReactContext) {
-                Log.i("TestApp", "App ReactHost onReactContextInitialized")
-            }
-        },)
-
-
+        reactNativeHost.reactInstanceManager.createReactContextInBackground()
         Log.i("TestApp", "App onCreate")
-        manager.createReactContextInBackground()
     }
 }

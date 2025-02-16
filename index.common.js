@@ -4,5 +4,8 @@ import { name as appName } from './app.json';
 
 console.log('common bundle message');
 AppRegistry.registerComponent(appName, () => {
-  return () => React.createElement(View, null, React.createElement(Text, null, "Common Bundle"));
+  return () => {
+    console.log('render common component');
+    return React.createElement(View, null, React.createElement(Text, null, "Common Bundle"));
+  };
 });
