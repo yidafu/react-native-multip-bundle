@@ -28,11 +28,9 @@ class MultipleReactActivityDelegate(
 ) : DefaultReactActivityDelegate(activity, mainComponentName, fabricEnabled) {
     private var mReactDelegate: ReactDelegate? = null
 
-    private val bundleLoadedCallback: (() -> Unit)? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         val helper = ReactHostHelper(reactHost as ReactHostImpl)
-//        super.onCreate(savedInstanceState)
+
         traceSection(
             0L,
             "ReactActivityDelegate.onCreate::init",
@@ -80,7 +78,6 @@ class MultipleReactActivityDelegate(
                             }
                         }
 
-//                    reactNativeHost.reactInstanceManager.createReactContextInBackground()
                     reactNativeHost.reactInstanceManager.addReactInstanceEventListener(
                         object : ReactInstanceEventListener {
                             override fun onReactContextInitialized(context: ReactContext) {
@@ -89,17 +86,17 @@ class MultipleReactActivityDelegate(
                                 val instance = reactNativeHost.reactInstanceManager.currentReactContext?.catalystInstance
                                 instance?.loadScriptFromAssets(context.assets, "assets://biz.android.bundle", false)
                                 Log.i("TestApp", "loaded biz bundle")
+                                if (mainComponentName != null) {
+                                    try {
+                                        this@MultipleReactActivityDelegate.loadApp(mainComponentName)
+                                    } catch (e: Exception) {
+                                        Log.e("TestApp", "load app $mainComponentName")
+                                    }
+                                }
                             }
                         },
                     )
-
-                    if (mainComponentName != null) {
-                        try {
-                            this@MultipleReactActivityDelegate.loadApp(mainComponentName)
-                        } catch (e: Exception) {
-                            Log.e("TestApp", "load app $mainComponentName")
-                        }
-                    }
+                    reactNativeHost.reactInstanceManager.createReactContextInBackground()
                 }
             },
         )
@@ -130,7 +127,6 @@ class MultipleReactActivityDelegate(
 
     override fun onResume() {
         mReactDelegate!!.onHostResume()
-//
 //        if (mPermissionsCallback != null) {
 //            mPermissionsCallback!!.invoke()
 //            mPermissionsCallback = null
